@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.common",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "../lib",
+    "inlineSourceMap": false,
+    "outDir": "../lib",
+    "sourceMap": true
+  },
+  "include": [
+    "../custom-typings/**/*.ts",
+    "../src/**/*.ts"
+  ]
+}

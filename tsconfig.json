@@ -1,0 +1,8 @@
+{
+  "extends": "./config/tsconfig.common",
+  "include": [
+    "custom-typings/**/*.ts",
+    "spec/**/*.ts",
+    "src/**/*.ts"
+  ]
+}

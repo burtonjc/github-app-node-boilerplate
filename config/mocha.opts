@@ -1,0 +1,5 @@
+--require ts-node/register
+--require spec/spec-global
+--reporter dot
+--watch-extensions ts
+--colors

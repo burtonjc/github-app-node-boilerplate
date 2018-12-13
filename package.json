@@ -1,0 +1,51 @@
+{
+  "name": "github-app-node-boilerplate",
+  "version": "1.0.0",
+  "description": "GitHub App Boilerplate",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc -p config/tsconfig.prod.json",
+    "clean:build": "rm -rf lib",
+    "clean:dependencies": "rm -rf node_modules",
+    "clean": "npm-run-all --parallel clean:build clean:dependencies",
+    "install:clean": "npm-run-all clean install",
+    "lint": "tslint -c ./config/tslint.json -e 'custom-typings/*' 'src/**/*.ts' 'spec/**/*.ts'",
+    "prebuild": "npm run clean:build",
+    "start:production": "node lib/server.js",
+    "start": "nodemon ./src/server.ts",
+    "test:watch": "mocha --watch --opts ./config/mocha.opts 'spec/**/*.ts'",
+    "test": "mocha --opts ./config/mocha.opts 'spec/**/*.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/burtonjc/github-app-node-boilerplate.git"
+  },
+  "keywords": [
+    "GitHub",
+    "App",
+    "Boilderplate",
+    "NodeJS"
+  ],
+  "author": "Jacob Burton <burtonjc35@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/burtonjc/github-app-node-boilerplate/issues"
+  },
+  "homepage": "https://github.com/burtonjc/github-app-node-boilerplate#readme",
+  "dependencies": {
+    "@types/node": "^10.12.12",
+    "chalk": "^2.4.1",
+    "jsonwebtoken": "^8.4.0",
+    "koa": "^2.6.2",
+    "koa-bodyparser": "^4.2.1",
+    "moment": "^2.22.2",
+    "pg": "^7.7.1",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^7.4.11",
+    "nodemon": "^1.18.8",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2"
+  }
+}

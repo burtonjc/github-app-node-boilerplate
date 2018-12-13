@@ -1,0 +1,20 @@
+{
+  "buildOnSave": false,
+  "compileOnSave": false,
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "lib": [
+      "dom",
+      "es2016"
+    ],
+    "module": "commonjs",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5"
+  }
+}
