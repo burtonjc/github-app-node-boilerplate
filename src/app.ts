@@ -1,5 +1,7 @@
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
+import * as logger from 'koa-logger';
+import 'reflect-metadata';
 
 import {
   ApplicationMiddleware,
@@ -12,6 +14,7 @@ export function buildApp(): Koa {
 
   app
     .use(ApplicationMiddleware.instrumentAndHandleErrors)
+    .use(logger())
     .use(ApplicationMiddleware.handleStatusCheck)
     .use(bodyParser())
     .use(GitHubMiddleware.abortEventsCausedByThisApp)

@@ -10,8 +10,10 @@ const pem: string = process.env.INTEGRATION_PRIVATE_KEY;
 export async function getInstallationAccessToken(installation: Installation, log: Log): Promise<InstallationAccessToken> {
   const [accessToken] = await Promise.all([
     InstallationAccessToken.findOne({
-      expiresAt: moment().add(5, 'seconds').toDate(),
-      installation: installation.installationId,
+      conditions: {
+        expiresAt: ['>', moment().add(5, 'seconds').toDate()],
+        installation: ['=', installation.installationId],
+      },
     }),
     InstallationAccessToken.remove({
       expiresAt: moment().add(5, 'seconds').toDate(),

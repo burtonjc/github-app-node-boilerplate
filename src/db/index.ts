@@ -10,6 +10,13 @@ export interface QueryOpts {
   values: any[]
 }
 
+export interface QueryExpression<T> {
+  select?: Array<keyof T>;
+  conditions?: Partial<{
+    [K in keyof T]: [string, T[K]]
+  }>,
+}
+
 interface TypedQueryResult<T> extends QueryResult {
   rows: T[];
 }

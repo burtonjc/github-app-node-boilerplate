@@ -3,17 +3,21 @@ import {Context} from 'koa';
 
 export async function checkGitHubSignature(ctx: Context, next: () => Promise<void>): Promise <void> {
   const signature: string = ctx.request.headers['x-hub-signature'];
+  console.log(0);
   if (!signature) {
+    console.log(1);
     ctx.status = 400;
     ctx.body = { message: 'Invalid signature' };
     return;
   }
 
+  console.log(2);
   const expected: string = crypto
-    .createHmac('sha1', process.env.GITHUB_WEBHOOK_SECRET)
-    .update((ctx.request as any).rawBody)
-    .digest('hex');
+  .createHmac('sha1', process.env.GITHUB_WEBHOOK_SECRET)
+  .update((ctx.request as any).rawBody)
+  .digest('hex');
 
+  console.log(3);
   if (signature !== `sha1=${expected}`) {
     ctx.status = 400;
     ctx.body = { message: 'Invalid signature' };
