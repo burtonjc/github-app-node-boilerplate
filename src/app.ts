@@ -1,7 +1,8 @@
+import 'reflect-metadata';
+
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as logger from 'koa-logger';
-import 'reflect-metadata';
 
 import {
   ApplicationMiddleware,

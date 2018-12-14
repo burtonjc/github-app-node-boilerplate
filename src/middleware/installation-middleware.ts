@@ -1,7 +1,8 @@
 import { Context } from 'koa';
+import { getRepository } from 'typeorm';
 
 import { getInstallationAccessToken } from '../helpers/authentication-helper';
-import { Installation } from '../db/installation';
+import { Installation, InstallationAccessToken } from '../db/entities';
 
 export async function getInstallationToken(ctx: Context, next: () => any): Promise<void> {
   const log = ctx.log;
@@ -11,13 +12,16 @@ export async function getInstallationToken(ctx: Context, next: () => any): Promi
 }
 
 export async function loadInstallation(ctx: Context, next: () => any): Promise<void> {
-  ctx.state.installation = await Installation.findOne({
-    installationId: ctx.request.body.installation.id,
-  });
+  const installation = await getRepository(Installation)
+    .createQueryBuilder('i')
+    .where('i.installationId = :installationId', { installationId: ctx.request.body.installation.id })
+    .getOne();
 
-  if (ctx.state.installation) {
+  if (installation) {
+    ctx.state.installation = installation;
     return await next();
   }
+
   ctx.status = 404;
   ctx.body = { message: 'Installation not found.' };
 }
@@ -28,10 +32,15 @@ export async function handleCreated(ctx: Context, next: () => any): Promise<void
     return await next();
   }
 
-  await Installation.create({
-    githubAccountId: ctx.request.body.installation.account.id,
-    installationId: ctx.request.body.installation.id,
-  });
+  const result = await getRepository(Installation)
+    .createQueryBuilder()
+    .insert()
+    .into(Installation)
+    .values([{
+      githubAccountId: ctx.request.body.installation.account.id,
+      installationId: ctx.request.body.installation.id,
+    }])
+    .execute();
 
   ctx.status = 201;
   ctx.body = { message: 'Created successfully!' };
@@ -42,12 +51,24 @@ export async function handleDeleted(ctx: Context, next: () => any): Promise<void
   if (ctx.request.headers['x-github-event'] !== 'installation' || action !== 'deleted') {
     return await next();
   }
-  const installation = ctx.request.body.installation;
-  const removed = await Installation.removeOne({
-    installationId: installation.id,
-  });
+  const appInstallation = ctx.request.body.installation;
+  const installation = await getRepository(Installation)
+    .createQueryBuilder('i')
+    .where('i.installationId = :installationId', { installationId: ctx.request.body.installation.id })
+    .getOne();
 
-  if (removed) {
-    ctx.status = 204;
-  }
+  const removedTokens = await getRepository(InstallationAccessToken)
+    .createQueryBuilder()
+    .delete()
+    .from(InstallationAccessToken)
+    .where('installation = :installation', { installation: installation.id })
+    .execute();
+  const removedInstallations = await getRepository(Installation)
+    .createQueryBuilder()
+    .delete()
+    .from(Installation)
+    .where('installationId = :installationId', { installationId: appInstallation.id })
+    .execute();
+
+  ctx.status = 204;
 }

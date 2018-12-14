@@ -7,8 +7,8 @@
     "experimentalDecorators": true,
     "inlineSourceMap": true,
     "lib": [
-      "dom",
-      "es2016"
+      "es5",
+      "es6"
     ],
     "module": "commonjs",
     "preserveConstEnums": true,

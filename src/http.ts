@@ -18,13 +18,7 @@ export default async function(opts: RequestOptions): Promise<IRequestResolution>
     request(opts, (err, response, body) => {
       if (err) { return reject(err); }
 
-      opts.log.info({
-        data: opts.json,
-        req: (response as any).request,
-        res: response,
-      }, 'request to GitHub');
-
-      return resolve({response, body});
+      return resolve({ response, body });
     });
   });
 }
